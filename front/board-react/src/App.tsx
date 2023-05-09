@@ -10,12 +10,12 @@ function App() {
     <>
     <Container fixed>
       <MainHeader />
-      <Grid container>
+      {/* <Grid container>
         <Grid item xs={2.5} >
-            {/* <MainMenus /> */}
+            <MainMenus />
             
         </Grid>
-      </Grid> 
+      </Grid>  */}
       <BoardWriteView />
     </Container>
     </>
