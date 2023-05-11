@@ -2,13 +2,16 @@ import { ChangeEvent, KeyboardEvent, useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 
-import { Box, Fab, Input, Card, IconButton, Divider, Container } from '@mui/material'
+import { Box, Fab, Input, Card, IconButton, Divider, Container, Typography } from '@mui/material'
 import CreateIcon from '@mui/icons-material/Create';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 
 import axios, { AxiosResponse } from 'axios';
 
 import { FILE_UPLOAD_URL, POST_BOARD_URL, authorizationHeader, mutipartHeader } from 'src/constants/api';
+import { PostBoardDto, PostProductDto } from 'src/apis/request/board';
+import { PostBoardResponseDto, PostProductResponseDto } from 'src/apis/response/board';
+import ResponseDto from 'src/apis/response';
 
 export default function BoardWriteView() {
 
@@ -21,9 +24,14 @@ export default function BoardWriteView() {
 
     const [cookies] = useCookies();
     const [boardContent, setBoardContent] = useState<string>('');
-    const [boardImgUrl, setBoardImgUrl] = useState<string>('');
+    const [boardImgUrl1, setBoardImgUrl] = useState<string>('');
+    //? 업로드하면 어떻게 들어가는지 잘 몰겠음
+    const [boardImgUrl2, setBoardImgUrl2] = useState<string>('');
+    const [boardImgUrl3, setBoardImgUrl3] = useState<string>('');
+    const [tag, setTag] = useState<string>('');
     const [productImgUrl, setProductImgUrl] = useState<string>('');
     const [productName, setProductName] = useState<string>('');
+    //? number로 하면 setState에서 value값에 뭘 넣어야 될 지 애매함 > string 값으로 다 바꾸는게 편할듯
     const [productPrice, setProductPrice] = useState<string>('');
     const [productUrl, setProductUrl] = useState<string>('');
 
@@ -49,8 +57,8 @@ export default function BoardWriteView() {
         data.append('file', event.target.files[0]);
 
         axios.post(FILE_UPLOAD_URL, data, mutipartHeader())
-            .then((response) => BoardImageUploadResponseHandler(response))
-            .catch((error) => BoardimageUploadErrorHandler(error))
+            .then((response) => boardImageUploadResponseHandler(response))
+            .catch((error) => boardImageUploadErrorHandler(error))
     }
 
     const onProductImageUploadButtonHandler = () => {
@@ -63,8 +71,8 @@ export default function BoardWriteView() {
         data.append('file', event.target.files[0]);
         
         axios.post(FILE_UPLOAD_URL, data, mutipartHeader())
-            .then((response) => ProductImageUploadResponseHandler(response))
-            .catch((error) => ProductImageUploadErrorHandler(error))
+            .then((response) => productImageUploadResponseHandler(response))
+            .catch((error) => productImageUploadErrorHandler(error))
     }
 
     const onProductNameChangeHandler = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -73,7 +81,7 @@ export default function BoardWriteView() {
     }
     const onProductPriceChangeHandler = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const value = event.target.value;
-        setProductPrice(value);
+        setProductPrice(value + '원');
     }
 
     const onProductUrlChangeHandler = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -81,46 +89,64 @@ export default function BoardWriteView() {
         setProductUrl(value);
     }
 
+    const onTagChangeHandler = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        
+    }
+    // const onBoardContentKeyPressHandler = (event: KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    //     if (event.key != 'Enter') return;
+    //     setBoardContent(boardContent + '/n');
+    // }
+
     const onWriteHandler = () => {
-        if (!boardImgUrl.trim() || !boardContent.trim()) {
+        if (!boardImgUrl1.trim() || !boardContent.trim()) {
             alert('모든 내용을 작성해주세요!');
             return;
         }
         postBoard();
     }
 
+    //?  ?//
     const postBoard = () => {
-        // const data: PostBoardDto = { boardContent, boardImgUrl, productImgUrl, productName, productPrice, productUrl};
+        const data: PostBoardDto & PostProductDto = { boardContent, boardImgUrl1, boardImgUrl2, boardImgUrl3, tag, productName, productImgUrl, productPrice, productUrl};
 
-        // axios.post(POST_BOARD_URL, data, authorizationHeader(accessToken))
+        axios.post(POST_BOARD_URL, data, authorizationHeader(accessToken))
+            .then((response) => postBoardResponseHandler(response))
+            .catch((error) => postBoardErrorHandler(error))
     }
 
     // response handler //
-    // const PostBoardResponseHandler = (response: AxiosResponse<any, any>) => {
-    //     const {  } = 
-    // }
+    const postBoardResponseHandler = (response: AxiosResponse<any, any>) => {
+        //? 이런식으로 하면 어떻게 나오는가
+        const { result, message, data } = response.data as ResponseDto<PostBoardResponseDto & PostProductResponseDto>
+        if (!result || !data) {
+            alert(message);
+            return;
+        }
+        // navigator('/myPage');
+    }
 
-    const BoardImageUploadResponseHandler = (response: AxiosResponse<any, any>) => {
+    const boardImageUploadResponseHandler = (response: AxiosResponse<any, any>) => {
         const imageUrl = response.data as string;
         if (!imageUrl) return;
         setBoardImgUrl(imageUrl);
     }
 
-    const ProductImageUploadResponseHandler = (response: AxiosResponse<any, any>) => {
-        const productImgRef = response.data as string;
-        if (!productImgRef) return;
-        setProductImgUrl(productImgRef);
+    const productImageUploadResponseHandler = (response: AxiosResponse<any, any>) => {
+        const productImgUrl = response.data as string;
+        if (!productImgUrl) return;
+        setProductImgUrl(productImgUrl);
     }
     
     // error handler //
-    const BoardimageUploadErrorHandler = (error: any) => {
+    const postBoardErrorHandler = (error: any) => {
         console.log(error.message);
     }
-
-    const ProductImageUploadErrorHandler = (error: any) => {
+    const boardImageUploadErrorHandler = (error: any) => {
         console.log(error.message);
     }
-
+    const productImageUploadErrorHandler = (error: any) => {
+        console.log(error.message);
+    }
 
   return (
     <Box sx={{ paddingTop: '100px' }}>
@@ -137,6 +163,9 @@ export default function BoardWriteView() {
                 </Container>                
             {/* //? 본문 내용 입력 */}
             <Box sx={{ display: 'block', textAlign: 'center', mt: '45px', p: '15px 0', border: 0.3, borderRadius: 0.5, backgroundColor: 'rgba(0, 0, 0, 0.02)'}}>
+                <Box sx={{ display: 'inline-block', mr: '30px', width: '100px', height: '50px', border: 0.05, borderRadius: 3, }}>
+                    <Input placeholder=''></Input>
+                </Box>
                 <Input sx={{ width: '800px' }} minRows={12} fullWidth multiline disableUnderline placeholder='내용을 입력하세요'
                     onChange={(event) => onBoardContentChangeHandler(event)}
                     onKeyDown={(event) => onBoardContentKeyPressHandler(event)} />
@@ -144,6 +173,7 @@ export default function BoardWriteView() {
         </Box>
 
         <Divider sx={{ m: '40px 0' }} />
+
         {/* //? 상품 업로드 박스 */}
         <Box sx= {{ display: 'flex', flexDirection: 'column', marginTop: '40px' }} >
             <Box sx={{ display: 'flex', justifyContent: 'space-between'}}>
@@ -263,7 +293,7 @@ export default function BoardWriteView() {
                                 onChange={(event) => onProductNameChangeHandler(event)}/>
                         <Input sx={{ mt:'10px', backgroundColor: 'rgba(0, 0, 0, 0.02)', width: '225px' }} disableUnderline placeholder='상품 가격' 
                                 onChange={(event) => onProductPriceChangeHandler(event)}/>
-                        <Input sx={{ mt:'10px', mr: '5px', backgroundColor: 'rgba(0, 0, 0, 0.02)', width: '225px' }} disableUnderline placeholder='https://www.instagram.com/' type='url' 
+                        <Input sx={{ mt:'10px', mr: '5px', backgroundColor: 'rgba(0, 0, 0, 0.02)', width: '225px' }} disableUnderline placeholder='상품 구매 Url' type='url' 
                                 onChange={(event) => onProductUrlChangeHandler(event)} />
                     </Box>
                 </Box>
@@ -280,5 +310,5 @@ export default function BoardWriteView() {
     </Box>
   )
 
-  // todo : 로그인 연결하고 이미지파일이 Box에 잘 들어가는지 확인, 메인content에 사진 여러개 올릴 방법 // apis(DTO)받아서 Post~ResponseHandler 완성하기 // 
+  // todo : 로그인 연결하고 이미지파일이 Box에 잘 들어가는지 확인 // navigator연결하기
 }

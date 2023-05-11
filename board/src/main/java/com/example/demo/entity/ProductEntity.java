@@ -23,7 +23,7 @@ public class ProductEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int productNumber;
     private String productName;
-    private int productPrice;
+    private String productPrice;
     private String productUrl;
     private String productImgUrl;
 

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class PostProductDto {
     @NotBlank
     private String productName;
-    private int productPrice;
+    private String productPrice;
     private String productUrl;
     private String productImgUrl;
 }

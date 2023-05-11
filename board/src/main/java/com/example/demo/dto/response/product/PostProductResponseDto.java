@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class PostProductResponseDto {
     private int productNumber;
     private String productName;
-    private int productPrice;
+    private String productPrice;
     private String productUrl;
     private String productImgUrl;
 

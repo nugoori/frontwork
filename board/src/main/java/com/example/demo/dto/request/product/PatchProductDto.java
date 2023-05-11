@@ -20,7 +20,7 @@ public class PatchProductDto {
     @Max(6)
     private int productNumber;
     private String productName;
-    private int productPrice;
+    private String productPrice;
     private String productUrl;
     private String productImgUrl;
 }
