@@ -28,13 +28,14 @@ interface Dto {
     likeList : [
       {
         boardNumber : number;
-        userEmail : string;
-        userNickname : string;
-        userProfileUrl : string | null;
+        // userEmail : string;
+        // userNickname : string;
+        // userProfileUrl : string | null; 좋아요 수만 올라가게 나올려면 이건 필요없는듯?
       }
     ];
     // productList : [
     //   {
+    //     boardNumber: number;
     //     productName: string;
     //     productPrice: string;
     //     productUrl: string;

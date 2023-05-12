@@ -14,13 +14,11 @@ import { PostBoardResponseDto, PostProductResponseDto } from 'src/apis/response/
 import ResponseDto from 'src/apis/response';
 
 export default function BoardWriteView() {
-
     // hook //
     // const navigator = useNavigate();
 
     const imageRef = useRef<HTMLInputElement | null>(null);
     const productImgRef = useRef<HTMLInputElement | null>(null);
-    const productRef = useRef<HTMLInputElement | null>(null);
 
     const [cookies] = useCookies();
     const [boardContent, setBoardContent] = useState<string>('');
@@ -31,7 +29,6 @@ export default function BoardWriteView() {
     const [tag, setTag] = useState<string>('');
     const [productImgUrl, setProductImgUrl] = useState<string>('');
     const [productName, setProductName] = useState<string>('');
-    //? number로 하면 setState에서 value값에 뭘 넣어야 될 지 애매함 > string 값으로 다 바꾸는게 편할듯
     const [productPrice, setProductPrice] = useState<string>('');
     const [productUrl, setProductUrl] = useState<string>('');
 
@@ -46,7 +43,6 @@ export default function BoardWriteView() {
         if (event.key != 'Enter') return;
         setBoardContent(boardContent + '/n');
     }
-
     const onBoardImageUploadButtonHandler = () => {
         if (!imageRef.current) return;
         imageRef.current.click();
@@ -60,7 +56,6 @@ export default function BoardWriteView() {
             .then((response) => boardImageUploadResponseHandler(response))
             .catch((error) => boardImageUploadErrorHandler(error))
     }
-
     const onProductImageUploadButtonHandler = () => {
         if (!productImgRef.current) return;
         productImgRef.current.click();
@@ -83,20 +78,14 @@ export default function BoardWriteView() {
         const value = event.target.value;
         setProductPrice(value + '원');
     }
-
     const onProductUrlChangeHandler = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const value = event.target.value;
         setProductUrl(value);
     }
-
     const onTagChangeHandler = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        
+        const value = event.target.value;
+        setTag(value);
     }
-    // const onBoardContentKeyPressHandler = (event: KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    //     if (event.key != 'Enter') return;
-    //     setBoardContent(boardContent + '/n');
-    // }
-
     const onWriteHandler = () => {
         if (!boardImgUrl1.trim() || !boardContent.trim()) {
             alert('모든 내용을 작성해주세요!');
@@ -104,7 +93,6 @@ export default function BoardWriteView() {
         }
         postBoard();
     }
-
     //?  ?//
     const postBoard = () => {
         const data: PostBoardDto & PostProductDto = { boardContent, boardImgUrl1, boardImgUrl2, boardImgUrl3, tag, productName, productImgUrl, productPrice, productUrl};
@@ -124,13 +112,11 @@ export default function BoardWriteView() {
         }
         // navigator('/myPage');
     }
-
     const boardImageUploadResponseHandler = (response: AxiosResponse<any, any>) => {
         const imageUrl = response.data as string;
         if (!imageUrl) return;
         setBoardImgUrl(imageUrl);
     }
-
     const productImageUploadResponseHandler = (response: AxiosResponse<any, any>) => {
         const productImgUrl = response.data as string;
         if (!productImgUrl) return;
@@ -155,25 +141,29 @@ export default function BoardWriteView() {
             {/* //? 본문 사진 업로드 */}
                 <Container sx= {{ p: '15px 0' , width: '100%', height: '650px', border: 0.3, borderRadius: 1.5, display: 'flex', justifyContent: 'space-between' }}>
                         <Box sx={{ width: '450px', border: 0.7, borderRadius: 1.5, boxSizing: 'border-box', backgroundColor: 'transparent' }}>
-                            <input ref={imageRef} hidden type='file' accept='image/*' onChange={(event) => onBoardImageUploadChangeHandler(event)} />
+                            <IconButton sx={{ position: 'end' }} onClick={() => onProductImageUploadButtonHandler()} >
+                                <AddAPhotoIcon />
+                                <input ref={imageRef} hidden type='file' accept='image/*' onChange={(event) => onBoardImageUploadChangeHandler(event)} />
+                            </IconButton>                            
                         </Box>
-                        <Box sx={{ width: '450px', border: 0.7, borderRadius: 1.5, boxSizing: 'border-box' }}>
-                            <input ref={imageRef} hidden type='file' accept='image/*' onChange={(event) => onBoardImageUploadChangeHandler(event)} />
+                        <Box sx={{ width: '450px', border: 0.7, borderRadius: 1.5, boxSizing: 'border-box', backgroundColor: 'transparent' }}>
+                            <IconButton onClick={() => onProductImageUploadButtonHandler()} >
+                                <AddAPhotoIcon />
+                                <input ref={imageRef} hidden type='file' accept='image/*' onChange={(event) => onBoardImageUploadChangeHandler(event)} />
+                            </IconButton>
                         </Box>                 
-                </Container>                
-            {/* //? 본문 내용 입력 */}
-            <Box sx={{ display: 'block', textAlign: 'center', mt: '45px', p: '15px 0', border: 0.3, borderRadius: 0.5, backgroundColor: 'rgba(0, 0, 0, 0.02)'}}>
-                <Box sx={{ display: 'inline-block', mr: '30px', width: '100px', height: '50px', border: 0.05, borderRadius: 3, }}>
-                    <Input placeholder=''></Input>
-                </Box>
+                </Container>      
+            <Box sx={{ display: 'block-flex', textAlign: 'center', mt: '45px', p: '15px 0px', border: 0.3, borderRadius: 0.5, backgroundColor: 'rgba(0, 0, 0, 0.02)'}}>
+                {/* //? 스타일 태그 */}
+                <Typography sx={{ m: '4px 10px 0 20px' }} >스타일 :</Typography>
+                <Input disableUnderline sx={{ mr: '10px' ,border: 0.05, width: '130px', height: '25px' }} onChange={(event) => onTagChangeHandler(event)} />           
+                {/* //? 본문 내용 입력 */}
                 <Input sx={{ width: '800px' }} minRows={12} fullWidth multiline disableUnderline placeholder='내용을 입력하세요'
                     onChange={(event) => onBoardContentChangeHandler(event)}
                     onKeyDown={(event) => onBoardContentKeyPressHandler(event)} />
             </Box>         
         </Box>
-
-        <Divider sx={{ m: '40px 0' }} />
-
+    <Divider sx={{ m: '40px 0' }} />
         {/* //? 상품 업로드 박스 */}
         <Box sx= {{ display: 'flex', flexDirection: 'column', marginTop: '40px' }} >
             <Box sx={{ display: 'flex', justifyContent: 'space-between'}}>
@@ -230,11 +220,11 @@ export default function BoardWriteView() {
                     </Box>
                     <Box  sx={{ ml: '5px', mt: '15px' }}>
                         <Input sx={{ backgroundColor: 'rgba(0, 0, 0, 0.02)', width: '225px' }} disableUnderline placeholder='상품 이름' 
-                        onChange={(event) => onProductNameChangeHandler(event)}/>
+                                onChange={(event) => onProductNameChangeHandler(event)}/>
                         <Input sx={{ mt:'10px', backgroundColor: 'rgba(0, 0, 0, 0.02)', width: '225px' }} disableUnderline placeholder='상품 가격' 
-                        onChange={(event) => onProductPriceChangeHandler(event)}/>
+                                onChange={(event) => onProductPriceChangeHandler(event)}/>
                         <Input sx={{ mt:'10px', mr: '5px', backgroundColor: 'rgba(0, 0, 0, 0.02)', width: '225px' }} disableUnderline placeholder='상품 구매 Url' type='url' 
-                        onChange={(event) => onProductUrlChangeHandler(event)} />
+                                onChange={(event) => onProductUrlChangeHandler(event)} />
                     </Box>                        
                 </Box>
             </Box>
@@ -242,7 +232,7 @@ export default function BoardWriteView() {
             <Box sx={{ mt: '20px', mb: '100px' ,display: 'flex', justifyContent: 'space-between'}}>
                 {/* //? 상품 등록박스4 */}
                 <Box sx={{ p: '15PX 15px', width: '235px', height: '285px', border: 0.3, borderRadius: 1 }}>
-                <Box>
+                    <Box>
                         <Card sx={{ width: '235px', height: '150px',backgroundColor: 'yellow', display: 'flex', justifyContent: 'center', boxSizing: 'border-box' }}>
                             <IconButton onClick={() => onProductImageUploadButtonHandler()} >
                                 <AddAPhotoIcon />
@@ -300,15 +290,15 @@ export default function BoardWriteView() {
             </Box>
         </Box>
 
-        <Fab sx={{ position: 'fixed', bottom: '250px', right: '100px' }} onClick={() => onBoardImageUploadButtonHandler()}>
+        {/* <Fab sx={{ position: 'fixed', bottom: '250px', right: '100px' }} onClick={() => onBoardImageUploadButtonHandler()}>
             <AddAPhotoIcon  />
             
-        </Fab>
+        </Fab> */}
         <Fab sx={{ position: 'fixed', bottom: '150px', right: '100px' }} onClick={() => onWriteHandler()}>
             <CreateIcon />
         </Fab>
     </Box>
   )
 
-  // todo : 로그인 연결하고 이미지파일이 Box에 잘 들어가는지 확인 // navigator연결하기
+  // todo : 로그인 연결하고 이미지파일이 Box에 잘 들어가는지 확인 // navigator연결하기 // BoardWriteView - ProductWriteView로 나누고 router에서 각각 받아오는게 나은가?
 }
