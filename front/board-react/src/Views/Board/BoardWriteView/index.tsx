@@ -139,20 +139,20 @@ export default function BoardWriteView() {
         {/* //? 게시물 본문 */}
         <Box sx={{ width: '100%'}}>
             {/* //? 본문 사진 업로드 */}
-                <Container sx= {{ p: '15px 0' , width: '100%', height: '650px', border: 0.3, borderRadius: 1.5, display: 'flex', justifyContent: 'space-between' }}>
-                        <Box sx={{ width: '450px', border: 0.7, borderRadius: 1.5, boxSizing: 'border-box', backgroundColor: 'transparent' }}>
-                            <IconButton sx={{ position: 'end' }} onClick={() => onProductImageUploadButtonHandler()} >
+                <Box sx= {{ p: '15px 0' , width: '100%', height: '650px', border: 0.3, borderRadius: 1.5, display: 'flex', justifyContent: 'space-between' }}>
+                        <Box sx={{ width: '100%'}} component='img' src={boardImgUrl1}>
+                            <IconButton onClick={() => onBoardImageUploadButtonHandler()} >
                                 <AddAPhotoIcon />
                                 <input ref={imageRef} hidden type='file' accept='image/*' onChange={(event) => onBoardImageUploadChangeHandler(event)} />
                             </IconButton>                            
                         </Box>
                         <Box sx={{ width: '450px', border: 0.7, borderRadius: 1.5, boxSizing: 'border-box', backgroundColor: 'transparent' }}>
-                            <IconButton onClick={() => onProductImageUploadButtonHandler()} >
+                            <IconButton onClick={() => onBoardImageUploadButtonHandler()} >
                                 <AddAPhotoIcon />
                                 <input ref={imageRef} hidden type='file' accept='image/*' onChange={(event) => onBoardImageUploadChangeHandler(event)} />
                             </IconButton>
                         </Box>                 
-                </Container>      
+                </Box>      
             <Box sx={{ display: 'block-flex', textAlign: 'center', mt: '45px', p: '15px 0px', border: 0.3, borderRadius: 0.5, backgroundColor: 'rgba(0, 0, 0, 0.02)'}}>
                 {/* //? 스타일 태그 */}
                 <Typography sx={{ m: '4px 10px 0 20px' }} >스타일 :</Typography>

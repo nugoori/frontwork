@@ -3,6 +3,7 @@ import { create } from "zustand";
 interface ISignUpStore {
     email: string;
     password: string;
+    passwordCheck: string;
     nickname: string;
     profile: string;
     height: string;
@@ -11,6 +12,7 @@ interface ISignUpStore {
 
     setEmail: (str: string) => void;
     setPassword: (str: string) => void;
+    setPasswordCheck: (str: string) => void;
     setNickname: (str: string) => void;
     setProfile: (str: string) => void;
     setHeight: (str: string) => void;
@@ -28,6 +30,7 @@ interface ISignUpStore {
 const useStore = create<ISignUpStore>((set) =>({
     email: '',
     password: '',
+    passwordCheck: '',
     nickname: '',
     profile: '',
     height: '',
@@ -36,6 +39,7 @@ const useStore = create<ISignUpStore>((set) =>({
 
     setEmail: (email) => set((state) => ({...state, email})),
     setPassword: (password) => set((state) => ({...state, password})),
+    setPasswordCheck: (passwordCheck) => set((state) => ({...state, passwordCheck})),
     setNickname: (nickname) => set((state) => ({...state, nickname})),
     setProfile: (profile) => set((state) => ({...state, profile})),
     setHeight: (height) => set((state) => ({...state, height})),
@@ -44,9 +48,9 @@ const useStore = create<ISignUpStore>((set) =>({
 
     signUpError: false,
     setSignUpError: (signUpError: boolean) => set((state) => ({...state, signUpError})),
-    emailValidate: null,
+    emailValidate: true,
     setEmailValidate: (emailValidate: boolean) => set((state) => ({...state, emailValidate})),
-    nicknameValidate: null,
+    nicknameValidate: true,
     setNicknameValidate: (nicknameValidate: boolean) => set((state) => ({...state, nicknameValidate}))
 }));
 

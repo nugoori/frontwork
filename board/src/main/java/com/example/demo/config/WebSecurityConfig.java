@@ -31,7 +31,7 @@ public class WebSecurityConfig {
             // session 기반 인증 사용 여부 (비활성화)
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
             // '/' "/api/auth/**" 모듈에 대해서 모두 허용 (인증을 하지 않고 사용 가능)
-            .authorizeRequests().antMatchers("/", "/auth/**", "/api/**","/api/board/search-tag/**").permitAll()
+            .authorizeRequests().antMatchers("/", "/auth/**", "/api/**","/api/board/search-tag/**", "/api/board/**", "/file/**").permitAll()
             // 나머지 요청에 대해서는 모두 인증된 사용자만 사용 가능
             .anyRequest().authenticated();
 
