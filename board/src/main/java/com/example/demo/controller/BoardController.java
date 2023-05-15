@@ -77,7 +77,9 @@ public class BoardController {
     }
     
     @PostMapping(POST_BOARD)
-    public ResponseDto<PostBoardResponseDto> postBoard(@AuthenticationPrincipal String email, @RequestBody PostBoardDto requestBody) {
+    public ResponseDto<PostBoardResponseDto> postBoard(
+        @AuthenticationPrincipal String email, 
+        @Valid @RequestBody PostBoardDto requestBody) {
         ResponseDto<PostBoardResponseDto> response = boardService.postBoard(email, requestBody);
         return response;
     }

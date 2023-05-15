@@ -24,14 +24,14 @@ export const GET_TOP3_LIST_URL = `${HOST}api/board/top3-list`;
 export const GET_TOP15_SEARCH_WORD_URL = `${HOST}api/board/top15-search-word`;
 export const GET_SEARCH_TAG = (tag: string) => `${HOST}api/board/search-tag/${tag}`;
 
-export const POST_BOARD_URL = `${HOST}api/board/`;
+export const POST_BOARD_URL = `${HOST}api/board/post-board`;
 export const POST_COMMENT_URL = `${HOST}api/board/comment`;
 export const POST_LIKE_LIST_URL = `${HOST}api/board/like-list`;
 export const LIKE_URL = `${HOST}api/board/like`;
 
 export const POST_PRODUCT_URL = `${HOST}product/post-product`;
 
-export const PATCH_BOARD_URL = `${HOST}api/board/`;
+export const PATCH_BOARD_URL = `${HOST}api/board/patch-board`;
 export const PATCH_PRODUCT_RUL = `${HOST}product/patch-product`;
 
 export const GET_BOARD_URL = (boardNumber: string) => `${HOST}api/board/${boardNumber}`;
