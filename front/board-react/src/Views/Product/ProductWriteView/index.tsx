@@ -11,6 +11,7 @@ import { PostProductDto } from 'src/apis/request/board';
 import ResponseDto from 'src/apis/response';
 import { PostProductResponseDto } from 'src/apis/response/board';
 
+// todo : boardwriteView에서 합쳐서 잘 돌아가면 필요없음
 
 export default function ProductWriteView() {
   //     hook      //
